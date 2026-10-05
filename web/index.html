@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Leo — Multi-agent tutor</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect rx='14' width='64' height='64' fill='%23141210'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-family='Georgia' font-size='36' fill='%23e2b15a'%3EL%3C/text%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,680&family=Source+Sans+3:wght@400;560;680&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="brand">
+          <span class="mark" aria-hidden="true">L</span>
+          <div>
+            <p class="eyebrow">Local study desk</p>
+            <h1>Leo</h1>
+          </div>
+        </div>
+        <div class="pills" id="health-pills" aria-live="polite"></div>
+      </header>
+
+      <div class="shell">
+        <aside class="rail">
+          <section class="panel">
+            <h2>Student memory</h2>
+            <div id="memory"></div>
+          </section>
+          <section class="panel">
+            <h2>Agents</h2>
+            <ol class="pipeline" id="pipeline"></ol>
+          </section>
+        </aside>
+
+        <main class="stage" id="stage"></main>
+      </div>
+    </div>
+    <script src="/static/app.js"></script>
+  </body>
+</html>
