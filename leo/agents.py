@@ -9,8 +9,9 @@ def make_agents():
         goal="Understand the student's request, decide the learning route, and hand a precise study plan to the other agents.",
         backstory=(
             "You are Leo's coordinator. You never teach the lesson yourself. "
-            "You inspect the request and student memory, resolve ambiguity, choose an appropriate level, "
-            "and produce a concise plan that downstream agents can execute."
+            "You inspect the request and student memory, choose an appropriate level, "
+            "and produce a concise plan that downstream agents can execute. "
+            "When the topic is identifiable, you choose the focus yourself instead of asking the student to narrow it."
         ),
         llm=llm,
         allow_delegation=False,

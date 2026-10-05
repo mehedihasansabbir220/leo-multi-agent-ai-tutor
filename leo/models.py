@@ -2,6 +2,19 @@ from typing import List, Literal
 from pydantic import BaseModel, Field
 
 
+_PLACEHOLDER_TOPICS = {
+    "",
+    "none",
+    "n/a",
+    "na",
+    "unknown",
+    "unclear",
+    "not identified",
+    "no subject",
+    "no topic",
+}
+
+
 class StudyPlan(BaseModel):
     request_clear: bool = True
     topic: str = ""
@@ -10,6 +23,15 @@ class StudyPlan(BaseModel):
     teaching_focus: List[str] = Field(default_factory=list)
     quiz_focus: List[str] = Field(default_factory=list)
     coordinator_note: str = ""
+
+    def has_topic(self) -> bool:
+        return self.topic.strip().lower().strip(".") not in _PLACEHOLDER_TOPICS
+
+    def normalized(self) -> "StudyPlan":
+        """A named topic is teachable even if a small model sets request_clear false."""
+        if self.has_topic():
+            self.request_clear = True
+        return self
 
 
 class QuizQuestion(BaseModel):

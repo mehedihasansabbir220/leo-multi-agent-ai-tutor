@@ -16,6 +16,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
+from .memory import StudentMemory
 from .models import QuizOutput
 from .orchestrator import LeoTutor
 
@@ -191,7 +192,7 @@ def health():
 
 @app.get("/api/memory")
 def memory():
-    return LeoTutor().memory.get()
+    return StudentMemory().get()
 
 
 @app.post("/api/sessions")
@@ -212,7 +213,7 @@ def start_session(body: StartBody):
         "quiz": None,
         "evaluation": None,
         "error": None,
-        "memory": LeoTutor().memory.get(),
+        "memory": StudentMemory().get(),
         "_quiz": None,
         "_lesson": None,
         "_tutor": None,

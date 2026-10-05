@@ -126,8 +126,10 @@ function renderStart(message = "") {
       request.focus();
     });
   });
-  form.addEventListener("submit", async (event) => {
+    form.addEventListener("submit", async (event) => {
     event.preventDefault();
+    const button = form.querySelector("button[type=submit]");
+    button.disabled = true;
     const body = {
       name: new FormData(form).get("name"),
       request: new FormData(form).get("request"),
@@ -143,6 +145,7 @@ function renderStart(message = "") {
       showSession(session);
       startPolling();
     } catch (error) {
+      button.disabled = false;
       renderStart(error.message);
     }
   });
@@ -260,6 +263,8 @@ function renderLesson(session) {
   document.querySelector("#quiz-form").addEventListener("submit", async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
+    const button = form.querySelector("button[type=submit]");
+    button.disabled = true;
     const answers = (quiz.questions || []).map((question) => {
       const field = form.querySelector(`[name="q-${question.id}"]:checked`) || form.querySelector(`[name="q-${question.id}"]`);
       const value = field ? field.value.trim() : "";
@@ -275,6 +280,7 @@ function renderLesson(session) {
       showSession(next);
       startPolling();
     } catch (error) {
+      button.disabled = false;
       const banner = document.createElement("div");
       banner.className = "banner";
       banner.textContent = error.message;

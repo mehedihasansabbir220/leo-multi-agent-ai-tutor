@@ -4,9 +4,10 @@ Student request: {request}
 Persistent student memory:
 {memory}
 
-Create a StudyPlan. If the request is unclear, infer only what is safe to infer and explain what clarification is needed.
-Set request_clear=false when the topic cannot reasonably be identified. Otherwise set request_clear=true.
-Choose a reasonable learner level from the request and memory, and specify the concepts the Explainer and Quiz Master should focus on.
+Create a StudyPlan.
+If the student named a subject, set request_clear=true, put that subject in topic, and choose teaching_focus and quiz_focus yourself.
+Set request_clear=false only when topic is empty. Leave coordinator_note empty when request_clear is true.
+Choose level from the request and write a one-sentence objective.
 """
 
 EXPLAINER_TASK = """

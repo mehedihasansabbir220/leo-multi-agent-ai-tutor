@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 from crewai import Crew, Process, Task
 from .agents import make_agents
 from .memory import StudentMemory
@@ -7,8 +9,31 @@ from .models import EvaluationOutput, QuizOutput, StudyPlan
 from .prompts import COORDINATOR_TASK, EVALUATOR_TASK, EXPLAINER_TASK, QUIZ_TASK
 
 
+def _use_project_crew_storage() -> None:
+    """Keep CrewAI's kickoff database inside the project.
+
+    CrewAI otherwise writes to ~/Library/Application Support, and SQLite
+    raises "unable to open database file" when that folder is not writable.
+    """
+    storage = Path(__file__).resolve().parent.parent / "data" / "crewai"
+    storage.mkdir(parents=True, exist_ok=True)
+    target = str(storage)
+
+    def db_storage_path() -> str:
+        storage.mkdir(parents=True, exist_ok=True)
+        return target
+
+    import crewai_core.paths as paths
+
+    paths.db_storage_path = db_storage_path
+    from crewai.memory.storage import kickoff_task_outputs_storage
+
+    kickoff_task_outputs_storage.db_storage_path = db_storage_path
+
+
 class LeoTutor:
     def __init__(self):
+        _use_project_crew_storage()
         self.memory = StudentMemory()
         self.coordinator, self.explainer, self.quiz_master, self.evaluator = make_agents()
 
@@ -62,7 +87,7 @@ class LeoTutor:
         lesson = explainer_task.output.raw
         if plan is None or quiz is None:
             raise RuntimeError("Leo could not produce the required structured plan/quiz output.")
-        return plan, lesson, quiz, result
+        return plan.normalized(), lesson, quiz, result
 
     def evaluate(self, quiz: QuizOutput, lesson: str, answers: str, on_stage=None):
         def watch(_output):

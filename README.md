@@ -9,6 +9,10 @@ Leo is a fully local multi-agent study assistant built with **CrewAI + Ollama**.
 
 No cloud LLM API and no API key are required. The LLM runs locally through Ollama.
 
+## Demo
+
+A full browser session is recorded in [demo/demovideo.mov](demo/demovideo.mov): the student request, the four-agent handoff, the lesson, the quiz, and the evaluation.
+
 ## Architecture
 
 ```text
@@ -95,7 +99,7 @@ The prompt design keeps responsibilities separate:
 
 ## Requirements
 
-- Python 3.10+
+- Python 3.10, 3.11, 3.12, or 3.13. CrewAI 1.x does not install on Python 3.14.
 - Ollama
 - A local Ollama model, such as `llama3.2:3b`
 
@@ -132,9 +136,11 @@ Keep that terminal running.
 Mac/Linux:
 
 ```bash
-python3 -m venv .venv
+python3.13 -m venv .venv
 source .venv/bin/activate
 ```
+
+Use `python3.13` when `python3` points at Python 3.14. Check with `python --version` after activating the environment.
 
 Windows PowerShell:
 
@@ -173,9 +179,19 @@ LEO_DB_PATH=./data/leo_memory.db
 
 No API key should be added.
 
-## Run
+## Run in the browser
 
-From the project root:
+From the project root, with the virtual environment active and Ollama running:
+
+```bash
+python web.py
+```
+
+Open [http://127.0.0.1:8000](http://127.0.0.1:8000).
+
+The page shows student memory, the four-agent pipeline, the lesson, a quiz form, and the evaluation. Local models usually take a minute or two; the agent rail shows which role is working. CrewAI's verbose log still prints in the terminal that started the server.
+
+## Run in the terminal
 
 ```bash
 python main.py
@@ -223,10 +239,18 @@ leo_multi_agent_tutor/
 │   ├── memory.py          # persistent SQLite student memory
 │   ├── models.py          # structured Pydantic outputs
 │   ├── orchestrator.py    # CrewAI sequential orchestration + handoffs
-│   └── prompts.py         # role-specific task prompt templates
+│   ├── prompts.py         # role-specific task prompt templates
+│   └── web.py             # local browser API
+├── web/
+│   ├── index.html         # study desk page
+│   ├── styles.css
+│   └── app.js
+├── demo/
+│   └── demovideo.mov      # browser session recording
 ├── .env.example
 ├── .gitignore
-├── main.py
+├── main.py                # terminal entry point
+├── web.py                 # browser entry point
 ├── README.md
 └── requirements.txt
 ```
@@ -261,7 +285,6 @@ Before pushing, confirm that `.env` and `data/leo_memory.db` are not tracked.
 | Structured quiz | Pydantic `QuizOutput` |
 | Structured evaluation | Pydantic `EvaluationOutput` |
 | Graceful unclear/stalled request | Coordinator clarity flag + CLI exception handling |
-| Interface | CLI with visible agent/task output |
+| Interface | Browser study desk (`python web.py`) and CLI (`python main.py`) |
 | No third-party AI API | Ollama runs locally |
 | API keys committed | None |
-# leo-multi-agent-ai-tutor
